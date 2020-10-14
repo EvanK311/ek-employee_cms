@@ -1,6 +1,6 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-// require("console.table");
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -21,14 +21,15 @@ function cmsCreator() {
         name: "choice",
         type: "list",
         message: "Select an action",
-        choices: ["Add Employee", "Add Department", "Quit"]
-    }).then(function (response) {
-        if (response === "Add Department") {
+        choices: ["Add Department","Add Role","Add Employee", "Quit"]
+    }).then(function ( choice ) {
+        if ( choice.choice  === "Add Department") {
             addDep()
-        } else if (response === "Add Employee") {
+        } else if (choice.choice === "Add Role") {
+            addRole()
+        } else if (choice.choice === "Add Employee") {
             addEmployee()
-        }
-        else {
+        } else if (choice.choice === "Quit") {
             connection.end()
         }
     })
@@ -41,40 +42,51 @@ function addDep() {
         type: "input",
         message: "Enter the name of the department"
     }).then(function (answers) {
-        connection.query("INSERT INTO department SET ?", { Name: answers.names }, function (err) {
+        connection.query("INSERT INTO department SET ?", {names: answers.name}, function (err) {
             if (err) throw err
             cmsCreator()
         })
     })
 }
-// addDep()
-// function addEmployee() {
-//     connection.query("SELECT * FROM Department", function (err, data) {
-//         if (err) throw err
 
-//         let depArr = data.map(function (dep) {
-//             return {
-//                 name: dep.Names,
-//                 value: dep.id
-//             }
-//         })
-//     })
+function addRole() {
+    connection.query("SELECT * FROM department", function (err, data) {
+        if (err) throw err
 
-//     inquirer.prompt([
-//         {
-//             name: "name",
-//             type: "input",
-//             message: "Enter the employee's first name"
-//         },
-//         {
-//             name: "name",
-//             type: "input",
-//             message: "Enter the employee's last name"
-//         },
-//         {
-//             name: "roleid",
-//             type: "input",
-//             message: ""
-//         }
-//     ])
-// }
+        let depArr = data.map(function (dep) {
+            return {
+                name: dep.names,
+                value: dep.id
+            }
+        })
+
+
+
+        inquirer.prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "Enter the employee title"
+            }, {
+                name: "depId",
+                type: "list",
+                message: "What is the department of this employee??",
+                choices: depArr
+            }, {
+                name: "salary",                
+                type: "number",
+                message: "how much money is this one making??"
+            },
+        ]).then(function (answers) {
+            connection.query("INSERT INTO Role SET ?", {
+                
+                title: answers.title,
+                salary: answers.salary,
+                Department_id: answers.depId
+            }, function (err) {
+                if (err) throw err
+                cmsCreator()
+            })
+        })
+    })
+}
