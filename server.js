@@ -33,9 +33,9 @@ function cmsCreator() {
             connection.end()
         }
     })
-
 }
 
+// function to add to Department table
 function addDep() {
     inquirer.prompt({
         name: "name",
@@ -49,19 +49,17 @@ function addDep() {
     })
 }
 
+// function to add to Roles table
 function addRole() {
     connection.query("SELECT * FROM department", function (err, data) {
         if (err) throw err
-
+// pulls department and id from department table
         let depArr = data.map(function (dep) {
             return {
                 name: dep.names,
                 value: dep.id
             }
         })
-
-
-
         inquirer.prompt([
             {
                 name: "title",
@@ -86,6 +84,54 @@ function addRole() {
             }, function (err) {
                 if (err) throw err
                 cmsCreator()
+            })
+        })
+    })
+}
+
+
+
+function addEmployee() {
+    connection.query("SELECT * FROM Role", function (err, data) {
+        if (err) throw err
+
+        let rolesArr = data.map(function (dep) {
+            return {
+                name: dep.Title,
+                value: dep.id
+            }
+        })
+        inquirer.prompt([
+            {
+                name: "firstname",
+                type: "input",
+                message: "Enter the employee's first name"
+            },
+            {
+                name: "lastname",
+                type: "input",
+                message: "Enter the employee's last name"
+            },
+            {
+                name: "manager",
+                type: "confirm",
+                message: "Is this employee a manager?"
+            },
+            {
+                name: "roleId",
+                type: "list",
+                message: "What is this employee's role?",
+                choices: rolesArr
+            }
+        ]).then(function (answers) {
+            connection.query("INSERT INTO employee SET ?", {
+                first_name: answers.firstname,
+                last_name: answers.lastname,
+                manager_id: answers.manager,
+                role_id: answers.roleId
+            }, function (err) {
+                    if (err) throw err;
+                    cmsCreator()
             })
         })
     })
