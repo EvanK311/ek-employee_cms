@@ -96,7 +96,7 @@ function addRole() {
 };
 
 
-
+// function to add employees to table
 function addEmployee() {
     connection.query("SELECT * FROM Role", function (err, data) {
         if (err) throw err
@@ -143,6 +143,7 @@ function addEmployee() {
     })
 };
 
+// functions to view tables
 function viewEmployees() {
     connection.query("SELECT * FROM employee_trackerDB.employee", function (err, data) {
         if (err) throw err

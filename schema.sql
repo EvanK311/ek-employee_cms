@@ -28,4 +28,3 @@ CREATE TABLE employee (
     )
 
 
--- SELECT * FROM top5000;
