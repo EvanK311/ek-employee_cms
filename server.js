@@ -144,26 +144,27 @@ function addEmployee() {
 };
 
 function viewEmployees() {
-    connection.query("SELECT * FROM employee_trackerDB.employee"), function (err, data) {
+    connection.query("SELECT * FROM employee_trackerDB.employee", function (err, data) {
         if (err) throw err
         console.table(data)
         cmsCreator()
-    }
+    })
 };
 
 function viewRoles() {
-    connection.query("SELECT * FROM employee_trackerDB.Role"), function (err, data) {
+    connection.query("SELECT * FROM employee_trackerDB.Role", function (err, data) {
         if (err) throw err
         console.table(data)
-       console.log("touch string")
-    }
-    cmsCreator()
+        console.log("touch string")
+        cmsCreator()
+    })
+    
 };
 
 function viewDepartments() {
-    connection.query("SELECT * FROM employee_trackerDB.department"), function (err, data) {
+    connection.query("SELECT * FROM employee_trackerDB.department", function (err, data) {
         if (err) throw err
         console.table(data)
         cmsCreator()
-    }
+    })
 };
