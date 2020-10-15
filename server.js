@@ -16,7 +16,7 @@ connection.connect(function (err) {
 });
 
 function cmsCreator() {
-    console.log("never give up, yo")
+    
     inquirer.prompt({
         name: "choice",
         type: "list",
