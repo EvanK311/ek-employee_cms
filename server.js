@@ -21,7 +21,7 @@ function cmsCreator() {
         name: "choice",
         type: "list",
         message: "Select an action",
-        choices: ["Add Department","Add Role","Add Employee", "Quit"]
+        choices: ["Add Department","Add Role","Add Employee","View Employees", "View Roles", "View Departments", "Quit"]
     }).then(function ( choice ) {
         if ( choice.choice  === "Add Department") {
             addDep()
@@ -29,11 +29,17 @@ function cmsCreator() {
             addRole()
         } else if (choice.choice === "Add Employee") {
             addEmployee()
+        }else if (choice.choice === "View Employees") {
+             viewEmployees()
+        }else if (choice.choice === "View Roles") {
+            viewRoles()
+        }else if (choice.choice === "View Departments") {
+            viewDepartments()
         } else if (choice.choice === "Quit") {
             connection.end()
         }
     })
-}
+};
 
 // function to add to Department table
 function addDep() {
@@ -47,7 +53,7 @@ function addDep() {
             cmsCreator()
         })
     })
-}
+};
 
 // function to add to Roles table
 function addRole() {
@@ -87,7 +93,7 @@ function addRole() {
             })
         })
     })
-}
+};
 
 
 
@@ -135,4 +141,29 @@ function addEmployee() {
             })
         })
     })
-}
+};
+
+function viewEmployees() {
+    connection.query("SELECT * FROM employee_trackerDB.employee"), function (err, data) {
+        if (err) throw err
+        console.table(data)
+        cmsCreator()
+    }
+};
+
+function viewRoles() {
+    connection.query("SELECT * FROM employee_trackerDB.Role"), function (err, data) {
+        if (err) throw err
+        console.table(data)
+       console.log("touch string")
+    }
+    cmsCreator()
+};
+
+function viewDepartments() {
+    connection.query("SELECT * FROM employee_trackerDB.department"), function (err, data) {
+        if (err) throw err
+        console.table(data)
+        cmsCreator()
+    }
+};
